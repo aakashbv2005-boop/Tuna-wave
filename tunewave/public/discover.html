@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discover - TuneWave</title>
+<meta name="description" content="Search songs, artists and genres and play instant previews.">
+<meta name="theme-color" content="#14112b">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-page="discover">
+<main class="main">
+<section>
+  <h1 style="font-size:clamp(2rem,5vw,3rem)">Discover</h1>
+  <form class="search" id="searchForm" role="search">
+    <input id="q" type="search" maxlength="80" placeholder="Search songs, artists or genres" aria-label="Search songs, artists or genres">
+    <button class="btn" type="submit">Search</button>
+  </form>
+  <div class="chips" id="genreChips">
+    <button class="chip" type="button" data-q="Pop">Pop</button>
+    <button class="chip" type="button" data-q="Rock">Rock</button>
+    <button class="chip" type="button" data-q="Electronic">Electronic</button>
+    <button class="chip" type="button" data-q="Lo-fi">Lo-fi</button>
+    <button class="chip" type="button" data-q="Hip-hop">Hip-hop</button>
+    <button class="chip" type="button" data-q="Indie">Indie</button>
+    <button class="chip" type="button" data-q="Classical">Classical</button>
+  </div>
+</section>
+<section>
+  <div class="section-head"><h2 id="resTitle">Trending now</h2><span id="resBadge" class="badge">Loading...</span></div>
+  <div id="results" class="list" aria-live="polite"></div>
+</section>
+</main>
+<script src="/js/app.js" defer></script>
+<script src="/js/chat.js" defer></script>
+</body>
+</html>
