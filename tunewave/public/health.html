@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Status - TuneWave</title>
+<meta name="description" content="Live health check for the TuneWave site and its services.">
+<meta name="theme-color" content="#14112b">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-page="health">
+<main class="main">
+<section>
+  <h1 style="font-size:clamp(2rem,5vw,3rem)">Status</h1>
+  <p class="muted"><span id="updated">Checking...</span> The same data is available as JSON at <a href="/api/health"><code>/api/health</code></a>.</p>
+  <div class="stats" id="healthGrid" aria-live="polite"></div>
+  <h2>Recent requests</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Time</th><th>Method</th><th>Path</th><th>Status</th><th>Duration</th></tr></thead>
+    <tbody id="reqBody"></tbody>
+  </table></div>
+</section>
+</main>
+<script src="/js/app.js" defer></script>
+<script src="/js/chat.js" defer></script>
+</body>
+</html>
