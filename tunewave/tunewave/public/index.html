@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TuneWave - Press play on something new</title>
+<meta name="description" content="TuneWave is a music streaming demo with instant previews and an AI support assistant.">
+<meta name="theme-color" content="#14112b">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-page="home">
+<main class="main">
+<section class="hero">
+  <div>
+    <h1>Press play on something new.</h1>
+    <p class="lead">Search millions of songs, hear a preview in one tap and ask the assistant when anything sounds off.</p>
+    <div class="actions">
+      <a class="btn" href="/discover">Start listening</a>
+      <a class="btn ghost" href="/faq">Read the FAQ</a>
+    </div>
+  </div>
+  <div class="eq" aria-hidden="true">
+    <span style="--i:0;--h:3"></span><span style="--i:1;--h:6"></span><span style="--i:2;--h:4"></span><span style="--i:3;--h:8"></span>
+    <span style="--i:4;--h:5"></span><span style="--i:5;--h:9"></span><span style="--i:6;--h:7"></span><span style="--i:7;--h:4"></span>
+    <span style="--i:8;--h:8"></span><span style="--i:9;--h:6"></span><span style="--i:10;--h:9"></span><span style="--i:11;--h:5"></span>
+    <span style="--i:12;--h:7"></span><span style="--i:13;--h:3"></span><span style="--i:14;--h:6"></span><span style="--i:15;--h:4"></span>
+  </div>
+</section>
+
+<section>
+  <div class="section-head"><h2>Trending now</h2><span id="trendBadge" class="badge">Loading...</span></div>
+  <div id="trending" class="grid" aria-live="polite"></div>
+</section>
+
+<section>
+  <h2>Pick a mood</h2>
+  <div class="chips">
+    <a class="chip" href="/discover?q=chill">Chill</a>
+    <a class="chip" href="/discover?q=workout">Workout</a>
+    <a class="chip" href="/discover?q=lo-fi">Lo-fi study</a>
+    <a class="chip" href="/discover?q=party">Party</a>
+    <a class="chip" href="/discover?q=acoustic">Acoustic</a>
+    <a class="chip" href="/discover?q=bollywood">Bollywood</a>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Something not working?</h2>
+  <p class="muted">The assistant answers from our help articles and explains any error code. If it cannot answer, it opens a support ticket for you.</p>
+  <div class="actions"><button class="btn" type="button" data-ask="">Ask the assistant</button><a class="btn ghost" href="/errors">See all error codes</a></div>
+</section>
+</main>
+<script src="/js/app.js" defer></script>
+<script src="/js/chat.js" defer></script>
+</body>
+</html>

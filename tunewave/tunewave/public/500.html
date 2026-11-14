@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>500 - Server error - TuneWave</title>
+<meta name="description" content="Something went wrong on our side.">
+<meta name="theme-color" content="#14112b">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-page="500">
+<main class="main">
+<section class="errpage">
+  <div class="code-num">500</div>
+  <h1 style="font-size:clamp(1.8rem,5vw,2.8rem)">The music skipped a beat</h1>
+  <p class="muted">Something broke on our side. It is not your fault. Reload in a moment, or ask the assistant what to do next.</p>
+  <div class="actions">
+    <button class="btn" type="button" onclick="location.reload()">Reload the page</button>
+    <button class="btn ghost" type="button" id="askBtn">Ask the assistant</button>
+    <a class="btn ghost" href="/">Back to home</a>
+  </div>
+</section>
+<script>
+  document.getElementById('askBtn').addEventListener('click', function () {
+    if (window.TuneChat) window.TuneChat.open('I got a 500 error. What does it mean and what should I do?', true);
+  });
+</script>
+</main>
+<script src="/js/app.js" defer></script>
+<script src="/js/chat.js" defer></script>
+</body>
+</html>

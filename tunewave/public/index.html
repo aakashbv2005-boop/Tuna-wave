@@ -3,54 +3,161 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TuneWave - Press play on something new</title>
-<meta name="description" content="TuneWave is a music streaming demo with instant previews and an AI support assistant.">
-<meta name="theme-color" content="#14112b">
-<link rel="stylesheet" href="/css/style.css">
+<title>TuneWave – music you can play with</title>
+<style>
+:root{--bg:#14112b;--p:#1e1a40;--p2:#2a2556;--line:#3a3573;--tx:#f6f3ff;--mu:#b0abdc;--co:#ff5c7a;--am:#ffb340;--w:linear-gradient(135deg,#ff5c7a,#ffb340)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:96px}
+button{font:inherit;color:inherit;cursor:pointer}:focus-visible{outline:3px solid var(--am);outline-offset:2px}
+.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+aside{background:var(--p);border-right:1px solid var(--line);padding:20px 14px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{font:800 1.4rem system-ui;display:flex;gap:8px;align-items:center;margin-bottom:18px}.brand i{width:28px;height:28px;border-radius:8px;background:var(--w);display:inline-block}
+.nav button{display:block;width:100%;text-align:left;background:none;border:0;border-left:3px solid transparent;padding:9px 12px;border-radius:8px;color:var(--mu)}
+.nav button:hover{background:var(--p2);color:var(--tx)}.nav button.on{background:var(--p2);color:var(--tx);border-left-color:var(--co)}
+aside h4{margin:20px 12px 6px;color:var(--mu);font-weight:600;font-size:.9rem}
+.np{display:flex;gap:6px;padding:0 4px;margin-top:8px}
+input{background:var(--bg);border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:9px 12px;font:inherit;min-width:0;width:100%}
+main{padding:22px clamp(14px,3vw,34px);min-width:0}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center;background:var(--p);border:1px solid var(--line);border-radius:20px;padding:22px;margin-bottom:22px;overflow:hidden}
+.hero h1{font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.05;margin:0 0 8px}.hero p{color:var(--mu);margin:0 0 14px}
+canvas{width:100%;height:150px;display:block}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}.bar input{max-width:320px}
+.chip{border:1px solid var(--line);background:var(--p);border-radius:999px;padding:6px 14px}.chip.on,.chip:hover{border-color:var(--am)}
+.row{display:grid;grid-template-columns:44px 1fr auto auto auto;gap:12px;align-items:center;padding:8px 10px;border-radius:12px;position:relative}
+.row:hover,.row.cur{background:var(--p)}.row.cur b{color:var(--am)}.row small{color:var(--mu);display:block}
+.art{width:44px;height:44px;border-radius:9px;display:grid;place-items:center;font-size:1.1rem;color:rgba(255,255,255,.85)}
+.ib{background:none;border:0;font-size:1.15rem;padding:6px 8px;border-radius:8px;color:var(--mu)}.ib:hover{background:var(--p2);color:var(--tx)}.ib.on{color:var(--co)}
+.pop{position:absolute;right:10px;top:46px;background:var(--p2);border:1px solid var(--line);border-radius:12px;padding:6px;z-index:20;min-width:170px}
+.pop button{display:block;width:100%;text-align:left;background:none;border:0;padding:7px 10px;border-radius:8px}.pop button:hover{background:var(--line)}
+footer.pl{position:fixed;left:0;right:0;bottom:0;height:84px;background:rgba(30,26,64,.97);border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:14px;align-items:center;padding:0 18px;z-index:30}
+.pi{display:flex;gap:10px;align-items:center;min-width:0}.pi b,.pi small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pi small{color:var(--mu)}
+.ct{display:flex;flex-direction:column;align-items:center;gap:4px}.btns{display:flex;gap:6px;align-items:center}
+.play{width:44px;height:44px;border-radius:50%;border:0;background:var(--w);color:#2a1020;font-size:1rem}
+.seek{display:flex;gap:8px;align-items:center;width:100%;font-size:.8rem;color:var(--mu)}input[type=range]{padding:0;accent-color:#ff5c7a;border:0;background:none}.seek input{flex:1}
+.vol{display:flex;gap:8px;justify-content:flex-end;align-items:center}.vol input{width:110px}
+.btn{border:0;border-radius:999px;padding:9px 18px;background:var(--w);color:#2a1020;font-weight:600}
+#fab{position:fixed;right:18px;bottom:100px;width:56px;height:56px;border-radius:50%;border:0;background:var(--w);color:#2a1020;font-size:1.5rem;z-index:40;box-shadow:0 8px 22px rgba(0,0,0,.4)}
+#chat{position:fixed;right:18px;bottom:100px;width:min(370px,calc(100vw - 24px));height:min(520px,calc(100vh - 130px));background:var(--p);border:1px solid var(--line);border-radius:18px;display:flex;flex-direction:column;z-index:45;overflow:hidden}
+#chat[hidden]{display:none}#chat header{display:flex;justify-content:space-between;padding:12px 14px;background:var(--p2)}#chat header button{background:none;border:0}
+#msgs{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px}.m{max-width:86%;padding:8px 12px;border-radius:14px;font-size:.93rem}.m.b{background:var(--p2);align-self:flex-start}.m.u{background:var(--w);color:#2a1020;align-self:flex-end}
+#cf{display:flex;gap:6px;padding:10px;border-top:1px solid var(--line)}.sg{display:flex;flex-wrap:wrap;gap:6px}.sg button{font-size:.82rem;padding:4px 10px}
+.toast{position:fixed;left:50%;bottom:104px;transform:translateX(-50%);background:var(--p2);border:1px solid var(--am);border-radius:12px;padding:8px 16px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}.toast.s{opacity:1}
+@media(max-width:820px){.app{grid-template-columns:1fr}aside{position:static;height:auto;display:flex;flex-wrap:wrap;gap:6px;align-items:center;border-right:0;border-bottom:1px solid var(--line)}.nav{display:flex;flex-wrap:wrap;gap:4px}.nav button{width:auto;border-left:0}aside h4{display:none}.hero{grid-template-columns:1fr}
+footer.pl{grid-template-columns:1fr auto;height:auto;padding:8px 12px}.vol{display:none}.ct{grid-column:1/-1;order:3}.row{grid-template-columns:44px 1fr auto auto}.row .ib.q{display:none}#fab,#chat{bottom:150px;right:10px}body{padding-bottom:150px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
 </head>
-<body data-page="home">
-<main class="main">
-<section class="hero">
-  <div>
-    <h1>Press play on something new.</h1>
-    <p class="lead">Search millions of songs, hear a preview in one tap and ask the assistant when anything sounds off.</p>
-    <div class="actions">
-      <a class="btn" href="/discover">Start listening</a>
-      <a class="btn ghost" href="/faq">Read the FAQ</a>
-    </div>
-  </div>
-  <div class="eq" aria-hidden="true">
-    <span style="--i:0;--h:3"></span><span style="--i:1;--h:6"></span><span style="--i:2;--h:4"></span><span style="--i:3;--h:8"></span>
-    <span style="--i:4;--h:5"></span><span style="--i:5;--h:9"></span><span style="--i:6;--h:7"></span><span style="--i:7;--h:4"></span>
-    <span style="--i:8;--h:8"></span><span style="--i:9;--h:6"></span><span style="--i:10;--h:9"></span><span style="--i:11;--h:5"></span>
-    <span style="--i:12;--h:7"></span><span style="--i:13;--h:3"></span><span style="--i:14;--h:6"></span><span style="--i:15;--h:4"></span>
-  </div>
-</section>
-
-<section>
-  <div class="section-head"><h2>Trending now</h2><span id="trendBadge" class="badge">Loading...</span></div>
-  <div id="trending" class="grid" aria-live="polite"></div>
-</section>
-
-<section>
-  <h2>Pick a mood</h2>
-  <div class="chips">
-    <a class="chip" href="/discover?q=chill">Chill</a>
-    <a class="chip" href="/discover?q=workout">Workout</a>
-    <a class="chip" href="/discover?q=lo-fi">Lo-fi study</a>
-    <a class="chip" href="/discover?q=party">Party</a>
-    <a class="chip" href="/discover?q=acoustic">Acoustic</a>
-    <a class="chip" href="/discover?q=bollywood">Bollywood</a>
-  </div>
-</section>
-
-<section class="panel">
-  <h2>Something not working?</h2>
-  <p class="muted">The assistant answers from our help articles and explains any error code. If it cannot answer, it opens a support ticket for you.</p>
-  <div class="actions"><button class="btn" type="button" data-ask="">Ask the assistant</button><a class="btn ghost" href="/errors">See all error codes</a></div>
-</section>
+<body>
+<div class="app">
+<aside>
+  <div class="brand"><i></i>TuneWave</div>
+  <div class="nav" id="nav"></div>
+  <h4>Your playlists</h4>
+  <div class="nav" id="pls"></div>
+  <form class="np" id="npf"><input id="npn" maxlength="30" placeholder="New playlist name" aria-label="New playlist name"><button class="btn" aria-label="Create playlist">+</button></form>
+</aside>
+<main>
+  <section class="hero">
+    <div><h1 id="hT">Press play on something new.</h1><p id="hA">12 tracks generated live in your browser. Like them, shuffle them, build playlists.</p>
+      <button class="btn" id="surprise">Surprise me</button></div>
+    <canvas id="vis" width="500" height="150" aria-label="Live audio visualizer"></canvas>
+  </section>
+  <div class="bar"><input id="q" type="search" placeholder="Search songs, artists or genres" aria-label="Search"><div id="chips" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
+  <h2 id="vt" style="margin:0 0 6px">All songs</h2>
+  <div id="list"></div>
 </main>
-<script src="/js/app.js" defer></script>
-<script src="/js/chat.js" defer></script>
+</div>
+<footer class="pl">
+  <div class="pi"><div class="art" id="pa" style="background:var(--p2)">♪</div><div style="min-width:0"><b id="pt">Nothing playing</b><small id="ps">Pick a track</small></div><button class="ib" id="plk" aria-label="Like current track">♥</button></div>
+  <div class="ct"><div class="btns"><button class="ib" id="shf" aria-label="Shuffle" title="Shuffle (S)">⇄</button><button class="ib" id="prv" aria-label="Previous">⏮</button><button class="play" id="ppl" aria-label="Play or pause">▶</button><button class="ib" id="nxt" aria-label="Next">⏭</button><button class="ib" id="rep" aria-label="Repeat" title="Repeat (R)">↻</button></div>
+    <div class="seek"><span id="tc">0:00</span><input type="range" id="sk" min="0" max="30" step="0.1" value="0" aria-label="Seek"><span id="td">0:30</span></div></div>
+  <div class="vol"><span aria-hidden="true">🔊</span><input type="range" id="vl" min="0" max="1" step="0.01" value="0.7" aria-label="Volume"></div>
+</footer>
+<button id="fab" aria-label="Open support assistant">💬</button>
+<section id="chat" hidden role="dialog" aria-label="Support assistant"><header><b>TuneWave assistant</b><button id="cx" aria-label="Close">✕</button></header><div id="msgs" aria-live="polite"></div><form id="cf"><input id="ci" maxlength="300" placeholder="Ask a question or type an error code" aria-label="Message"><button class="btn">Send</button></form></section>
+<div class="toast" id="toast" role="status"></div>
+<script>
+(()=>{'use strict';
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+const DUR=30;
+const T=[['Neon Monsoon','Lumen Park','Synthwave','#ff3d8b','#5b3df5',11],['Coastal Static','Pale Harbour','Indie','#2ec4b6','#1b3a6b',23],['Midnight Chai','Raag Rewired','Lo-fi','#ffb23f','#7a2e5a',37],['Gravity Garden','Kite and Ember','Pop','#ff7a59','#ff3d8b',41],['Copper Skyline','The Slow Orchard','Folk','#d98c3f','#3b2a52',58],['Pulse Theory','Voltage Choir','Electronic','#3df5c8','#3d5bf5',64],['Paper Lanterns','Mina Okafor','R&B','#f5b83d','#c2415a',72],['Dust and Diesel','Rusty Meridian','Rock','#c2693d','#2a1f3d',86],['Blue Hour Bus','Sol Vega','Chill','#5b8cf5','#2c2370',93],['Static Bloom','Lumen Park','Synthwave','#b43df5','#ff7a59',105],['Monsoon Metro','Raag Rewired','Lo-fi','#3da5f5','#7a2e5a',117],['Ghost Frequency','Voltage Choir','Electronic','#6b6b8a','#1b1b30',129]].map((t,i)=>({id:i,title:t[0],artist:t[1],genre:t[2],c1:t[3],c2:t[4],seed:t[5]}));
+let S={liked:[],pl:[],tickets:[]};try{S={...S,...JSON.parse(localStorage.getItem('tw2')||'{}')}}catch{}
+const save=()=>{try{localStorage.setItem('tw2',JSON.stringify(S))}catch{}};
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('s');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('s'),2600)};
+let view='all',q='',genre='',cur=-1,shuf=false,rep=false,ctx,master,an,startAt=0,off=0,playing=false,vol=.7,pop=null;
+
+/* ---------- views ---------- */
+function vis(){let l=T;if(view==='liked')l=T.filter(t=>S.liked.includes(t.id));else if(view.startsWith('p:')){const p=S.pl[+view.slice(2)];l=p?p.ids.map(i=>T[i]):[]}
+if(genre)l=l.filter(t=>t.genre===genre);if(q){const k=q.toLowerCase();l=l.filter(t=>(t.title+t.artist+t.genre).toLowerCase().includes(k))}return l}
+function nav(){const n=[['all','Home'],['liked',`Liked songs (${S.liked.length})`]];$('#nav').innerHTML=n.map(([k,l])=>`<button data-v="${k}" class="${view===k?'on':''}">${l}</button>`).join('');
+$('#pls').innerHTML=S.pl.length?S.pl.map((p,i)=>`<button data-v="p:${i}" class="${view==='p:'+i?'on':''}">${esc(p.name)} (${p.ids.length})</button>`).join(''):'<p style="color:var(--mu);margin:4px 12px;font-size:.9rem">None yet. Create one below.</p>';
+const g=[...new Set(T.map(t=>t.genre))];$('#chips').innerHTML=g.map(x=>`<button class="chip ${genre===x?'on':''}" data-g="${x}">${x}</button>`).join('')}
+function list(){const l=vis();const title=view==='all'?'All songs':view==='liked'?'Liked songs':(S.pl[+view.slice(2)]||{}).name||'Playlist';$('#vt').textContent=title;
+$('#list').innerHTML=l.length?l.map(t=>`<div class="row ${t.id===cur?'cur':''}" data-id="${t.id}"><div class="art" style="background:linear-gradient(135deg,${t.c1},${t.c2})">${t.id===cur&&playing?'♫':'♪'}</div><div style="min-width:0"><b>${esc(t.title)}</b><small>${esc(t.artist)} · ${t.genre}</small></div><button class="ib ${S.liked.includes(t.id)?'on':''}" data-a="like" aria-label="Like ${esc(t.title)}">${S.liked.includes(t.id)?'♥':'♡'}</button><button class="ib q" data-a="add" aria-label="Add to playlist">＋</button><span style="color:var(--mu)">${fmt(DUR)}</span></div>`).join(''):`<p style="color:var(--mu)">${view==='all'?'No songs match that search.':'Nothing here yet. Like songs or add them with the + button.'}</p>`}
+const all=()=>{nav();list();bar()};
+
+/* ---------- audio engine (songs are synthesised from a seed, no downloads) ---------- */
+function notes(seed){let r=seed>>>0||1;const rnd=()=>(r=(Math.imul(r,1664525)+1013904223)>>>0)/4294967296;
+const minor=rnd()<.6,sc=minor?[0,2,3,5,7,8,10,12]:[0,2,4,5,7,9,11,12],root=110*Math.pow(2,Math.floor(rnd()*7)/12),bpm=78+Math.floor(rnd()*52),st=60/bpm/2,out=[];
+let deg=0;for(let i=0;i*st<DUR;i++){const t=i*st;if(i%8===0)out.push({t,f:root*Math.pow(2,sc[[0,3,4,5][(i/8|0)%4]%8]/12)/2*2,l:st*7,ty:'triangle',g:.9});
+if(rnd()>.22){deg=Math.max(0,Math.min(7,deg+Math.floor(rnd()*5)-2));out.push({t,f:root*2*Math.pow(2,sc[deg]/12),l:st*.9,ty:i%16<8?'sine':'square',g:i%16<8?.7:.25})}
+if(i%2===0)out.push({t,k:1})}return out}
+function start(id,o=0){stop();const tr=T[id];ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();ctx.resume();
+master=ctx.createGain();master.gain.value=vol*.3;an=an||ctx.createAnalyser();an.fftSize=64;master.connect(an);an.connect(ctx.destination);
+const now=ctx.currentTime+.05;nodes=[];
+for(const n of notes(tr.seed)){if(n.t<o)continue;const at=now+n.t-o;
+if(n.k){const x=ctx.createOscillator(),g=ctx.createGain();x.frequency.setValueAtTime(130,at);x.frequency.exponentialRampToValueAtTime(40,at+.12);g.gain.setValueAtTime(.8,at);g.gain.exponentialRampToValueAtTime(.001,at+.14);x.connect(g);g.connect(master);x.start(at);x.stop(at+.15);nodes.push(x);continue}
+const x=ctx.createOscillator(),g=ctx.createGain();x.type=n.ty;x.frequency.value=n.f;g.gain.setValueAtTime(.0001,at);g.gain.linearRampToValueAtTime(n.g*.5,at+.02);g.gain.exponentialRampToValueAtTime(.001,at+n.l);x.connect(g);g.connect(master);x.start(at);x.stop(at+n.l+.02);nodes.push(x)}
+startAt=now;off=o;cur=id;playing=true;meta();all()}
+let nodes=[];
+function stop(){nodes.forEach(n=>{try{n.stop()}catch{}});nodes=[];if(master){try{master.disconnect()}catch{}}}
+const pos=()=>ctx&&cur>=0?Math.max(0,Math.min(DUR,off+ctx.currentTime-startAt)):0;
+function toggle(){if(cur<0){const l=vis();if(l.length)start(l[0].id);return}if(playing){ctx.suspend();playing=false}else{ctx.resume();playing=true}bar();list()}
+function step(d){const l=vis();if(!l.length)return;let i=l.findIndex(t=>t.id===cur);if(shuf&&d>0){let n;do{n=l[Math.floor(Math.random()*l.length)].id}while(l.length>1&&n===cur);start(n);return}
+if(d<0&&pos()>3){start(cur);return}i=(i+d+l.length)%l.length;start(l[i].id)}
+function meta(){const t=T[cur];$('#pt').textContent=t.title;$('#ps').textContent=t.artist;$('#pa').style.background=`linear-gradient(135deg,${t.c1},${t.c2})`;$('#hT').textContent=t.title;$('#hA').textContent=`${t.artist} · ${t.genre}. Playing a melody generated from this track’s seed.`;document.title=`${t.title} – TuneWave`}
+function bar(){$('#ppl').textContent=playing?'❚❚':'▶';$('#shf').classList.toggle('on',shuf);$('#rep').classList.toggle('on',rep);$('#plk').classList.toggle('on',cur>=0&&S.liked.includes(cur))}
+
+/* ---------- visualiser + progress ---------- */
+const cv=$('#vis'),cg=cv.getContext('2d');let seekDrag=false;
+function frame(){const w=cv.width,h=cv.height;cg.clearRect(0,0,w,h);const d=new Uint8Array(32);if(an&&playing)an.getByteFrequencyData(d);const t=T[cur]||{c1:'#ff5c7a',c2:'#ffb340'},g=cg.createLinearGradient(0,h,0,0);g.addColorStop(0,t.c1);g.addColorStop(1,t.c2);cg.fillStyle=g;
+const bw=w/32;for(let i=0;i<32;i++){const v=playing?d[i]/255:.06+.04*Math.sin(Date.now()/600+i);const bh=Math.max(6,v*h);cg.beginPath();cg.roundRect(i*bw+3,h-bh,bw-6,bh,6);cg.fill()}
+if(cur>=0){const p=pos();if(!seekDrag){$('#sk').value=p;$('#tc').textContent=fmt(p)}if(playing&&p>=DUR-.05){rep?start(cur):step(1)}}requestAnimationFrame(frame)}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(b){view=b.dataset.v;all();return}
+const g=e.target.closest('[data-g]');if(g){genre=genre===g.dataset.g?'':g.dataset.g;all();return}
+const a=e.target.closest('[data-a]');if(a){const id=+a.closest('.row').dataset.id;if(a.dataset.a==='like'){const i=S.liked.indexOf(id);i>-1?S.liked.splice(i,1):S.liked.push(id);save();all();toast(i>-1?'Removed from Liked songs':'Added to Liked songs')}
+else{closePop();const row=a.closest('.row');const p=document.createElement('div');p.className='pop';p.innerHTML=(S.pl.length?S.pl.map((x,i)=>`<button data-pp="${i}" data-t="${id}">${esc(x.name)}</button>`).join(''):'<button disabled>Create a playlist first</button>');row.appendChild(p);pop=p}return}
+const pp=e.target.closest('[data-pp]');if(pp){const pl=S.pl[+pp.dataset.pp],id=+pp.dataset.t;if(!pl.ids.includes(id))pl.ids.push(id);save();closePop();all();toast(`Added to ${pl.name}`);return}
+const r=e.target.closest('.row');if(r&&!e.target.closest('.pop')){start(+r.dataset.id);return}closePop()});
+function closePop(){if(pop){pop.remove();pop=null}}
+$('#npf').onsubmit=e=>{e.preventDefault();const n=$('#npn').value.trim();if(!n)return;S.pl.push({name:n,ids:[]});$('#npn').value='';save();view='p:'+(S.pl.length-1);all();toast(`Created “${n}”`)};
+$('#q').oninput=e=>{q=e.target.value.trim();list()};
+$('#ppl').onclick=toggle;$('#nxt').onclick=()=>step(1);$('#prv').onclick=()=>step(-1);
+$('#shf').onclick=()=>{shuf=!shuf;bar();toast(shuf?'Shuffle on':'Shuffle off')};$('#rep').onclick=()=>{rep=!rep;bar();toast(rep?'Repeating this track':'Repeat off')};
+$('#plk').onclick=()=>{if(cur<0)return;const i=S.liked.indexOf(cur);i>-1?S.liked.splice(i,1):S.liked.push(cur);save();all()};
+$('#surprise').onclick=()=>start(Math.floor(Math.random()*T.length));
+$('#vl').oninput=e=>{vol=+e.target.value;if(master)master.gain.value=vol*.3};
+$('#sk').oninput=()=>{seekDrag=true;$('#tc').textContent=fmt(+$('#sk').value)};$('#sk').onchange=()=>{seekDrag=false;if(cur>=0){const was=playing;start(cur,+$('#sk').value);if(!was){ctx.suspend();playing=false;bar()}}};
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.code==='Space'){e.preventDefault();toggle()}else if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1);else if(e.key==='s')$('#shf').click();else if(e.key==='r')$('#rep').click()});
+
+/* ---------- support assistant (FAQ + error codes + tickets, all in the browser) ---------- */
+const F=[['How do I reset my password?','Choose Sign in, then Forgot password, and open the reset link we email you within 30 minutes.','reset forgot password login'],['Is TuneWave free?','Yes. The free plan has ads. Premium removes ads and adds offline downloads.','free price premium plan cost ads'],['Can I listen offline?','Premium members can download playlists and play them offline for up to 30 days.','offline download internet'],['How do I create a playlist?','Type a name in the sidebar and press +. Then use the + button on any song to add it.','playlist create make add'],['How do I like a song?','Press the heart next to a song. Liked songs appear under Liked songs in the sidebar.','like heart favourite favorite save'],['What are the keyboard shortcuts?','Space plays or pauses, the arrow keys skip, S toggles shuffle and R toggles repeat.','keyboard shortcuts keys hotkeys'],['Why can’t I hear anything?','Check your device volume and the TuneWave volume slider. Browsers only start audio after you press a track.','sound audio hear silent volume play'],['How do I cancel Premium?','Open Account, Subscription, then Cancel Premium. You keep Premium until the billing period ends.','cancel premium subscription billing'],['Which browsers work?','Current Chrome, Edge, Firefox and Safari on desktop, Android and iOS.','browser device phone mobile support'],['How do I contact support?','Ask me here. If I can’t answer, I’ll open a ticket for the team.','contact support help ticket human']];
+const E={400:'Bad request: the server couldn’t understand what was sent. Check what you typed and try again.',401:'Unauthorized: you need to sign in first.',403:'Forbidden: your account doesn’t have permission for this.',404:'Not found: that page doesn’t exist or has moved. Go back home and navigate from there.',429:'Too many requests: slow down and retry in about a minute.',500:'Server error: something broke on our side. Reload in a moment, or open a ticket.',503:'Service unavailable: we’re down for maintenance or overloaded. Try again in a few minutes.','TW-701':'Track unavailable: this song can’t be previewed in your region. Pick another version.'};
+const tk=s=>(String(s).toLowerCase().match(/[a-z0-9]+/g)||[]).filter(w=>w.length>2);
+const stopw=new Set('the and how what why can for you our your this that with are does have not'.split(' '));
+function answer(m){const c=m.match(/\b(tw[-\s]?701|400|401|403|404|429|500|503)\b/i);if(c){const k=/tw/i.test(c[0])?'TW-701':c[0];return'Error '+k+' – '+E[k]}
+if(/^\s*(hi|hello|hey|thanks|thank you)\b/i.test(m))return'Hi! Ask me about plans, playlists, playback or an error code.';
+const w=tk(m).filter(x=>!stopw.has(x));if(!w.length)return null;let best=null,bs=0;for(const f of F){const k=new Set(tk(f[0]+' '+f[2]));const s=w.filter(x=>k.has(x)).length/w.length;if(s>bs){bs=s;best=f}}return bs>=.5?best[1]:null}
+function say(t,c){const d=document.createElement('div');d.className='m '+c;d.textContent=t;$('#msgs').appendChild(d);$('#msgs').scrollTop=1e9}
+function openChat(){$('#chat').hidden=false;$('#fab').hidden=true;if(!$('#msgs').children.length){say('Hi! I answer from our FAQ and explain error codes. If I can’t help, I’ll open a support ticket.','b');const s=document.createElement('div');s.className='sg';['How do I reset my password?','What does error 429 mean?','What are the keyboard shortcuts?'].forEach(x=>{const b=document.createElement('button');b.className='chip';b.textContent=x;b.onclick=()=>{s.remove();ask(x)};s.appendChild(b)});$('#msgs').appendChild(s)}$('#ci').focus()}
+function ask(m){say(m,'u');const a=answer(m);if(a)say(a,'b');else{const ref='TKT-'+String(S.tickets.length+1).padStart(5,'0');S.tickets.push({ref,msg:m,at:new Date().toISOString()});save();say(`I couldn’t find that in our help articles, so I’ve opened ticket ${ref} for the team.`,'b')}}
+$('#fab').onclick=openChat;$('#cx').onclick=()=>{$('#chat').hidden=true;$('#fab').hidden=false};
+$('#cf').onsubmit=e=>{e.preventDefault();const v=$('#ci').value.trim();if(v){$('#ci').value='';ask(v)}};
+
+all();frame();
+})();
+</script>
 </body>
 </html>
