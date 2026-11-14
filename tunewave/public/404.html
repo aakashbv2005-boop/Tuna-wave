@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>404 - Page not found - TuneWave</title>
+<meta name="description" content="This page does not exist.">
+<meta name="theme-color" content="#14112b">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-page="404">
+<main class="main">
+<section class="errpage">
+  <div class="code-num">404</div>
+  <h1 style="font-size:clamp(1.8rem,5vw,2.8rem)">This track is not in our library</h1>
+  <p class="muted">The address <code id="badPath"></code> does not exist or has moved.</p>
+  <div class="actions">
+    <a class="btn" href="/">Back to home</a>
+    <button class="btn ghost" type="button" id="askBtn">Ask the assistant</button>
+  </div>
+</section>
+<script>
+  document.getElementById('badPath').textContent = location.pathname;
+  document.getElementById('askBtn').addEventListener('click', function () {
+    if (window.TuneChat) window.TuneChat.open('I got a 404 error at ' + location.pathname + '. What does it mean and what should I do?', true);
+  });
+</script>
+</main>
+<script src="/js/app.js" defer></script>
+<script src="/js/chat.js" defer></script>
+</body>
+</html>

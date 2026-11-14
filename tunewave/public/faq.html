@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ - TuneWave</title>
+<meta name="description" content="Answers to common questions about TuneWave accounts, playlists and playback.">
+<meta name="theme-color" content="#14112b">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-page="faq">
+<main class="main">
+<section>
+  <h1 style="font-size:clamp(2rem,5vw,3rem)">Frequently asked questions</h1>
+  <p class="muted"><span id="faqCount">Loading</span>, loaded from our SQL database.</p>
+  <div class="field"><label for="faqFilter">Filter questions</label><input id="faqFilter" type="search" placeholder="Try &quot;password&quot; or &quot;offline&quot;"></div>
+  <div id="faqList" aria-live="polite"><p class="muted">Loading questions...</p></div>
+</section>
+<section class="panel">
+  <h2>Did not find your answer?</h2>
+  <div class="actions"><button class="btn" type="button" data-ask="">Ask the assistant</button><a class="btn ghost" href="/support">Create a ticket</a></div>
+</section>
+</main>
+<script src="/js/app.js" defer></script>
+<script src="/js/chat.js" defer></script>
+</body>
+</html>

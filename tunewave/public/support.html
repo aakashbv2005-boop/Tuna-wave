@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support - TuneWave</title>
+<meta name="description" content="Create a support ticket for the TuneWave team.">
+<meta name="theme-color" content="#14112b">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body data-page="support">
+<main class="main">
+<section>
+  <h1 style="font-size:clamp(2rem,5vw,3rem)">Contact support</h1>
+  <div class="support-grid">
+    <form class="panel" id="ticketForm" novalidate>
+      <div class="two">
+        <div class="field"><label for="tName">Name (optional)</label><input id="tName" name="name" maxlength="80" autocomplete="name"></div>
+        <div class="field"><label for="tEmail">Email</label><input id="tEmail" name="email" type="email" required maxlength="120" autocomplete="email"></div>
+      </div>
+      <div class="field"><label for="tSubject">Subject</label><input id="tSubject" name="subject" required maxlength="120"></div>
+      <div class="field"><label for="tMessage">What happened?</label><textarea id="tMessage" name="message" rows="6" required maxlength="2000" placeholder="Tell us what you tried and any error code you saw."></textarea></div>
+      <button class="btn" type="submit">Send ticket</button>
+      <p id="ticketMsg" role="status"></p>
+    </form>
+    <aside class="panel">
+      <h3>Faster answers</h3>
+      <p class="muted">The assistant replies instantly and opens a ticket for you when it cannot answer.</p>
+      <div class="actions"><button class="btn ghost" type="button" data-ask="">Ask the assistant</button></div>
+      <h3 style="margin-top:1.5rem">Seeing an error code?</h3>
+      <p class="muted">Every code and its fix is listed on the <a href="/errors">error codes page</a>.</p>
+    </aside>
+  </div>
+</section>
+</main>
+<script src="/js/app.js" defer></script>
+<script src="/js/chat.js" defer></script>
+</body>
+</html>
